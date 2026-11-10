@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Peta Takdir</title>
+    <meta name="theme-color" content="#0f1b33">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #0f1b33; }
+        iframe { border: none; width: 100%; height: 100%; display: block; }
+    </style>
+</head>
+<body>
+    <iframe id="petaFrame" title="Peta Takdir"></iframe>
+    <script>
+        // URL aplikasi GAS Peta Takdir
+        const baseUrl = "https://script.google.com/macros/s/AKfycbwld78a6O5G5rXYXnOrvqwK2l_7jZ3LLr_7LISmZH5fWsdbkTqVA3wfArtdWi2vfhdbTQ/exec";
+
+        // Hanya teruskan tkn (bukan seluruh query string). Jika tidak ada di URL
+        // (misalnya dibuka dari ikon layar utama), pakai sesi yang tersimpan dari login.
+        const tkn = new URLSearchParams(window.location.search).get("tkn")
+                 || localStorage.getItem("sessionId")
+                 || "";
+        document.getElementById("petaFrame").src = baseUrl + (tkn ? "?tkn=" + encodeURIComponent(tkn) : "");
+
+        // Service Worker (hanya menyimpan cangkang halaman ini)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("Service Worker Terdaftar!"))
+                .catch(err => console.log("Gagal:", err));
+        }
+    </script>
+</body>
+</html>
